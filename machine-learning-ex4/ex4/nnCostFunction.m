@@ -69,7 +69,24 @@ a3 = sigmoid(Theta2 * hidden);
 for label=1:num_labels
   J = J + 1/m * (-log(a3(label,:))*(y==label)-log(1-a3(label,:))*(1-(y==label)));
 end
-J = J + lambda/(2*m)*(sum(sum(Theta1(:, 2:end).^2)) + sum(sum(Theta2(:, 2:end).^2)))
+% Regularized cost function
+J = J + lambda/(2*m)*(sum(sum(Theta1(:, 2:end).^2)) + sum(sum(Theta2(:, 2:end).^2)));
+
+for i=1:m
+  a1 = X(i, :)';
+  a2 = sigmoid(Theta1 * a1);
+  a2 = [1;a2];
+  a3 = sigmoid(Theta2 * a2);
+  delta3 = a3 - ((1:num_labels)'==y(i));
+  delta2 = (Theta2'*delta3).*([0;sigmoidGradient(Theta1 * a1)]);
+  Theta1_grad = Theta1_grad + delta2(2:end)*a1';
+  Theta2_grad = Theta2_grad + delta3*a2';
+end
+Theta1_grad = Theta1_grad/m;
+Theta2_grad = Theta2_grad/m;
+Theta2_grad(:,2:end) = Theta2_grad(:,2:end)+(lambda/m)*Theta2(:,2:end);
+Theta1_grad(:,2:end) = Theta1_grad(:,2:end)+(lambda/m)*Theta1(:,2:end);
+
 
 
 
