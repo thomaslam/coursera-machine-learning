@@ -107,7 +107,9 @@ pause;
 %  Before you start implementing the neural network, you will first
 %  implement the gradient for the sigmoid function. You should complete the
 %  code in the sigmoidGradient.m file.
-%
+%￼% Randomly initialize the weights to small values
+epsilon init = 0.12;
+W = rand(L out, 1 + L in) * 2 * epsilon init − epsilon init;
 
 fprintf('\nEvaluating sigmoid gradient...\n')
 
